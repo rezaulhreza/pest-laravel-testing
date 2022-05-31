@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterIndexController;
@@ -18,5 +19,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/',HomeController::class);
-Route::get('auth/register',RegisterIndexController::class)->name('auth.register');
-Route::get('auth/login',LoginController::class)->name('auth.login');
+
+
+
+Route::prefix('auth/')->group(function () {
+    Route::get('login',LoginController::class)->name('auth.login');
+
+
+    Route::get('register',RegisterIndexController::class)->name('auth.register');
+
+});
+
+// Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+
+// Route::resource('books',BookController::class);
+
+
+// });
+
+Route::resource('/books', BookController::class);

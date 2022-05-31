@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Contracts\Auth\Authenticatable;
+
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -28,6 +31,34 @@ expect()->extend('toBeOne', function () {
     return $this->toBe(1);
 });
 
+
+
+
+// expect()->extend('toBeAdmin', function () {
+//     return $this->toBe('Admin');
+// });
+
+
+
+expect()->extend('toBeRedirectedFor', function ( string $url,string $method='get') {
+return actingAs($this->value)->{$method}($url)->assertStatus(302);
+});
+
+
+
+
+expect()->extend('toBeRedirectedWhenLoggedIn', function (string $url, string $method = 'get') {
+    $response = null;
+
+    if (!$this->value) {
+        $response = test()->{$method}($url);
+    } else {
+        $response = actingAs($this->value)->{$method}($url);
+    }
+
+    return $response->assertStatus(302);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Functions
@@ -39,7 +70,7 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function actingAs(Authenticatable $user)
 {
-    // ..
+    return test()->actingAs($user);
 }

@@ -35,3 +35,9 @@ it('can register user successfully')
 ->assertAuthenticated();
 
 
+
+it('redirects authenticated user', function () {
+    expect(User::factory()->create())->toBeRedirectedWhenLoggedIn('/auth/register');
+});
+
+

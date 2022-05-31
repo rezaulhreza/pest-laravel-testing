@@ -16,6 +16,10 @@ uses(RefreshDatabase::class);
 
 it('can display login page')->get('auth/login')  ->assertStatus(200);
 
+test('login form has email and password field and a submit button')
+->get('auth/login')
+->assertSeeText(['Email','Password','Submit']);
+
 it('throws errors if inputs are empty',function(){
 
 
@@ -28,11 +32,13 @@ it('throws errors if inputs are empty',function(){
 it('redirects logged in users', function(){
 
     $user=User::factory()->create();
-    $this->actingAs($user)
+   actingAs($user)
     ->get('auth/login')
     ->assertStatus(302);
 
 });
+
+
 
 test('user can log in', function(){
     $user=User::factory()->create([
@@ -51,6 +57,9 @@ test('user can log in', function(){
 });
 
 
+
+
+
 it('is a HoT for user login')->tap(function(){
     $user=User::factory()->create();
 
@@ -62,4 +71,16 @@ it('is a HoT for user login')->tap(function(){
 
     $this->assertAuthenticated();
 
+});
+
+
+/**custom assertion example */
+// it('is Admin',function(){
+//     expect('Admin')->toBeAdmin();
+// });
+
+
+
+it('redirects authenticated user', function () {
+    expect(User::factory()->create())->toBeRedirectedFor('/auth/login');
 });
